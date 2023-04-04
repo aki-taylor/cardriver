@@ -50,13 +50,17 @@ radio.onReceivedValue(function (name, value) {
     }
     if (name == "L") {
         speed_L = _speed
+        speed_R = 0
     } else if (name == "R") {
+        speed_L = 0
         speed_R = _speed
     } else if (name == "LR") {
         speed_L = _speed
         speed_R = _speed
     }
 })
+let last_speed_R = 0
+let last_speed_L = 0
 let _speed = 0
 let speed_R = 0
 let speed_L = 0
@@ -68,7 +72,13 @@ pins.analogSetPeriod(AnalogPin.P16, 2)
 speed_L = 0
 speed_R = 0
 basic.forever(function () {
-    MotorLDrive(speed_L)
-    MotorRDrive(speed_R)
-    basic.pause(200)
+    if (last_speed_L != speed_L) {
+        last_speed_L = speed_L
+        MotorLDrive(speed_L)
+    }
+    if (last_speed_R != speed_R) {
+        last_speed_R = speed_R
+        MotorRDrive(speed_R)
+    }
+    basic.pause(5)
 })
